@@ -6,7 +6,7 @@ from PyQt6.QtCore import QTimer
 from app.domain.effects.printer import PrinterEffect, PS
 from app.application.effects_executer import EffectsExecuter
 from app.presentation.ui_storage import UIStorage
-from app.presentation.windows import *
+from app.presentation.windows.main import MainWindow
 
 if __name__ == "__main__":
     # loop = get_loop()
@@ -24,6 +24,6 @@ if __name__ == "__main__":
     # timer.timeout.connect(g)
     # timer.timeout.connect(timer.stop)
     # timer.start(1000)
-    window = UIStorage.find('main')
+    window = MainWindow()
     window.show()
     exit(app.exec())

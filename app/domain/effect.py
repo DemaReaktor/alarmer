@@ -8,7 +8,7 @@ class EffectSettings:
 
 
 class Effect[Settings: EffectSettings](ABC):
-    def __init__(self, settings: Settings):
+    def __init__(self, settings: Settings | None = None):
         self.settings = settings
 
     @abstractmethod

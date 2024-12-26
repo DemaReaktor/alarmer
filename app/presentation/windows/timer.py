@@ -4,23 +4,18 @@ from app.application.classes.settings import TimersSettings
 
 
 class TimerDialog(QtWidgets.QDialog):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, settings: TimersSettings | None = None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         UIStorage.loadUI('timer', self)
+        # self.ok_button: QtWidgets.QLineEdit
         self.ok_button.clicked.connect(self.accept_clicked)
         self.cancel_button.clicked.connect(self.close)
-        self.settings = None
+        self.settings = settings
+        self.job_text.setText(str(self.settings.job_time))
+        self.break_text.setText(str(self.settings.break_time))
+        self.timer_box.setChecked(self.settings.show_timer)
 
     def accept_clicked(self):
-        self.answer = self.settings
+        self.settings = TimersSettings(int(self.job_text.text()), int(self.break_text.text()),
+            self.timer_box.isChecked())
         self.close()
-
-    # dialog.show()
-    # dialog.start_button: QtWidgets.QPushButton
-    # g = EffectsExecuter()
-    # g.effects.append(PrinterEffect(PS('1')))
-    # g.effects.append(PrinterEffect(PS('2')))
-    # timer = QTimer(dialog)
-
-
-UIStorage.ui_windows['timer'] = TimerDialog
