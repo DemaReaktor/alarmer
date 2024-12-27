@@ -1,15 +1,20 @@
-import time
-
+from datetime import datetime
 from PyQt6 import QtWidgets
+from PyQt6.QtCore import QTimer
 from app.presentation.ui_storage import UIStorage
 from app.presentation.windows.timer import TimerDialog
 from app.presentation.windows.break_window import BreakDialog
 from app.presentation.windows.effects import EffectsDialog
 from app.application.classes.settings import TimersSettings, BreakSettings, EffectsSettings
-from app.application.effects_executer import EffectsExecuter
-from app.domain.effects.black_monitor import BlackMonitorEffect
+from app.domain.effects_executer import EffectsExecuter
+from app.application.effects.application_timer import ApplicationTimerEffect
+from app.application.effects.black_monitor import BlackMonitorEffect
+# from app.application.effects.mouse_stop import
+from app.application.settings_storage import SettingsStorage
+from app.application.timer_manager import TimerManager
 
 
+#   TODO: realize all settings
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -18,17 +23,23 @@ class MainWindow(QtWidgets.QMainWindow):
         self.timer_button.clicked.connect(self.open_timer)
         self.break_button.clicked.connect(self.open_break)
         self.effects_button.clicked.connect(self.open_effects)
-        self.timer_settings = TimersSettings()
-        self.break_settings = BreakSettings()
-        self.effects_settings = EffectsSettings()
+        self.timer_settings = SettingsStorage.try_load('timer.json', TimersSettings)
+        self.break_settings = SettingsStorage.try_load('break.json', BreakSettings)
+        self.effects_settings = SettingsStorage.try_load('effects.json', EffectsSettings)
         self.start_button.clicked.connect(self.start)
+        self.timer_manager = TimerManager(self, self.timer_settings, self.break_settings, self.effects_settings)
+        self.timer_manager.timer_out = lambda job: self.time_out(job)
 
     def start(self):
-        executor = EffectsExecuter()
-        executor.effects.append(BlackMonitorEffect())
-        executor()
-        time.sleep(2)
-        executor.stop()
+        self.timer_manager.update_settings(self.timer_settings, self.break_settings, self.effects_settings)
+        self.timer_manager.start_timer(True)
+
+    def time_out(self, job_time: bool):
+        if not job_time:
+            # TODO: if stop job time
+            # TODO: update effects
+            pass
+        self.timer_manager.start_timer(not job_time)
 
     def open_effects(self):
         dialog = EffectsDialog(self.effects_settings)
@@ -51,11 +62,14 @@ class MainWindow(QtWidgets.QMainWindow):
     def on_close_timer(self, dialog):
         if dialog.settings is not None:
             self.timer_settings = dialog.settings
+            SettingsStorage.save(self.timer_settings, 'timer.json')
 
     def on_close_break(self, dialog):
         if dialog.settings is not None:
             self.break_settings = dialog.settings
+            SettingsStorage.save(self.break_settings, 'break.json')
 
     def on_close_effects(self, dialog):
         if dialog.settings is not None:
             self.effects_settings = dialog.settings
+            SettingsStorage.save(self.effects_settings, 'effects.json')

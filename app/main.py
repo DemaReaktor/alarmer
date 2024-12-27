@@ -1,11 +1,6 @@
-import os
 import sys
 
-from PyQt6 import QtWidgets, uic
-from PyQt6.QtCore import QTimer
-from app.domain.effects.printer import PrinterEffect, PS
-from app.application.effects_executer import EffectsExecuter
-from app.presentation.ui_storage import UIStorage
+from PyQt6 import QtWidgets
 from app.presentation.windows.main import MainWindow
 
 if __name__ == "__main__":

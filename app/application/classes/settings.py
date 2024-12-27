@@ -3,8 +3,8 @@ from dataclasses import dataclass
 
 @dataclass(init=True)
 class TimersSettings:
-    job_time: int = 30
-    break_time: int = 5
+    job_time: float = 30
+    break_time: float = 5
     show_timer: bool = False
 
 

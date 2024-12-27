@@ -18,3 +18,6 @@ class Effect[Settings: EffectSettings](ABC):
     @abstractmethod
     def stop(self):
         pass
+
+    def on_time(self, time: int):
+        pass
