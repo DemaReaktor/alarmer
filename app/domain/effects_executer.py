@@ -16,3 +16,6 @@ class EffectsExecuter:
     def on_time(self, time: int):
         for effect in self.effects:
             effect.on_time(time)
+
+    def clear(self):
+        self.effects.clear()

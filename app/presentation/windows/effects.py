@@ -1,4 +1,4 @@
-from PyQt6 import QtWidgets, QtCore, QtGui
+from PyQt6 import QtWidgets
 from app.presentation.ui_storage import UIStorage
 from app.application.classes.settings import EffectsSettings
 

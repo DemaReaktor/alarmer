@@ -1,9 +1,6 @@
 from app.domain.effect import Effect
-from dataclasses import dataclass
-from app.domain.effect import EffectSettings
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPalette, QColor
 
 
 class BlackMonitorEffect(Effect):

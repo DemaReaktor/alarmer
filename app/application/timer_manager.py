@@ -1,6 +1,4 @@
 from app.domain.effects_executer import EffectsExecuter
-from app.application.effects.application_timer import ApplicationTimerEffect
-from app.application.effects.black_monitor import BlackMonitorEffect
 from PyQt6.QtCore import QTimer
 from datetime import datetime
 from PyQt6.QtWidgets import QMainWindow
@@ -44,4 +42,6 @@ class TimerManager:
         if difference >= full_time:
             effect_executor.stop()
             timer.stop()
+            del timer
+            effect_executor.clear()
             self.timer_out(job_time)

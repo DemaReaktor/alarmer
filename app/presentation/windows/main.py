@@ -8,12 +8,10 @@ from app.application.classes.settings import TimersSettings, BreakSettings, Effe
 from app.application.effects.application_timer import ApplicationTimerEffect
 from app.application.effects.black_monitor import BlackMonitorEffect
 from app.application.effects.mouse_stop import StopMouseEffect
-# from app.application.effects.mouse_stop import
 from app.application.settings_storage import SettingsStorage
 from app.application.timer_manager import TimerManager
 
 
-#   TODO: realize all settings
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -28,6 +26,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.start_button.clicked.connect(lambda: self.start())
         self.timer_manager = TimerManager(self, self.timer_settings, self.break_settings, self.effects_settings)
         self.timer_manager.timer_out = lambda job: self.time_out(job)
+        self.label = None
+        self.stop_break = None
 
     def start(self, job_time: bool = True):
         self.timer_manager.update_settings(self.timer_settings, self.break_settings, self.effects_settings)
@@ -48,8 +48,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.start(False)
             return
 
-        # TODO: if stop job time
-        # TODO: update effects
         if not self.break_settings.wait_activity:
             self.start()
             return
@@ -57,20 +55,20 @@ class MainWindow(QtWidgets.QMainWindow):
         self.stop_break = QtWidgets.QWidget()
         self.stop_break.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
         self.stop_break.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        label = QtWidgets.QLabel(self.stop_break)
-        label.setStyleSheet("font-size: 30px;")
-        label.setText('Перерва закінчилась, можете продовжити (достатньо порухати мишкою або нажати на кнопку)')
-        label.adjustSize()
+        self.label = QtWidgets.QLabel(self.stop_break)
+        self.label.setStyleSheet("font-size: 30px;")
+        self.label.setText('Перерва закінчилась, можете продовжити (достатньо навести на цей текст)')
+        self.label.adjustSize()
         self.stop_break.adjustSize()
-        # self.stop_break.mouseMoveEvent = label
-        self.stop_break.mouseMoveEvent = lambda x: self.stop_waiting()
-        self.stop_break.setMouseTracking(True)
-        self.mouseMoveEvent = lambda x: self.stop_waiting()
-        self.setMouseTracking(True)
+        self.label.mouseMoveEvent = lambda x: self.stop_waiting()
+        self.label.setMouseTracking(True)
         self.stop_break.show()
 
     def stop_waiting(self):
+        self.label.setMouseTracking(False)
         self.stop_break.close()
+        self.label = None
+        self.stop_break = None
         self.start()
 
     def open_effects(self):
