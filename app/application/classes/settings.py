@@ -18,3 +18,4 @@ class BreakSettings:
 class EffectsSettings:
     black_monitor: bool = True
     mouse_stop: bool = True
+    pause: bool = False

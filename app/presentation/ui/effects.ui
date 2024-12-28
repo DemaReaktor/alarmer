@@ -7,17 +7,17 @@
     <x>0</x>
     <y>0</y>
     <width>509</width>
-    <height>142</height>
+    <height>175</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Налаштування ефектів</string>
   </property>
   <widget class="QPushButton" name="cancel_button">
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>90</y>
+     <y>130</y>
      <width>131</width>
      <height>41</height>
     </rect>
@@ -35,7 +35,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>90</y>
+     <y>130</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -53,7 +53,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
+     <y>50</y>
      <width>481</width>
      <height>31</height>
     </rect>
@@ -71,7 +71,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>50</y>
+     <y>90</y>
      <width>481</width>
      <height>31</height>
     </rect>
@@ -83,6 +83,24 @@
    </property>
    <property name="text">
     <string>чорний екран</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="pause_box">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>481</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>павза аудіо та відео</string>
    </property>
   </widget>
  </widget>

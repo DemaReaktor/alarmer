@@ -13,3 +13,4 @@ class BlackMonitorEffect(Effect):
 
     def stop(self):
         self.window.close()
+        self.window = None

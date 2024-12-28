@@ -12,10 +12,12 @@ class EffectsDialog(QtWidgets.QDialog):
         self.settings = settings
         self.black_box.setChecked(self.settings.black_monitor)
         self.mouse_box.setChecked(self.settings.mouse_stop)
+        self.pause_box.setChecked(self.settings.pause)
 
     def accept_clicked(self):
         self.settings = EffectsSettings(
             mouse_stop=self.mouse_box.isChecked(),
             black_monitor=self.black_box.isChecked(),
+            pause=self.pause_box.isChecked()
         )
         self.close()

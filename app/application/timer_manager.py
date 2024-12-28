@@ -9,39 +9,39 @@ from typing import Callable
 class TimerManager:
     def __init__(self, window: QMainWindow,
             timer_settings: TimersSettings,
-            break_settings: BreakSettings,
-            effects_settings: EffectsSettings,
     ):
         self.timer_settings = timer_settings
-        self.break_settings = break_settings
-        self.effects_settings = effects_settings
         self.window = window
         self.executor = EffectsExecuter()
         self.timer_out: Callable[[bool], None] | None = None
-
-    def update_settings(self, timer_settings: TimersSettings,
-            break_settings: BreakSettings,
-            effects_settings: EffectsSettings):
-        self.timer_settings = timer_settings
-        self.break_settings = break_settings
-        self.effects_settings = effects_settings
+        self.timer = None
+        self.pause_effects: bool = False
 
     def start_timer(self, job_time: bool = True):
         full_time = (self.timer_settings.job_time if job_time else self.timer_settings.break_time) * 60_000
         self.executor(parent=self.window, time=full_time)
-        timer = QTimer(self.window)
+        self.timer = QTimer(self.window)
         start_time = datetime.now()
-        timer.timeout.connect(lambda: self.on_time(job_time, timer, start_time, self.executor))
-        timer.start(1_000)
+        self.timer.timeout.connect(lambda: self.on_time(job_time, start_time))
+        self.timer.start(1_000)
 
-    def on_time(self, job_time: bool, timer: QTimer, start_time: datetime, effect_executor: EffectsExecuter):
+    def on_time(self, job_time: bool, start_time: datetime):
         now_time = datetime.now()
         difference = int((now_time - start_time).total_seconds() * 1_000)
-        effect_executor.on_time(difference)
+        self.executor.on_time(difference)
         full_time = (self.timer_settings.job_time if job_time else self.timer_settings.break_time) * 60_000
         if difference >= full_time:
-            effect_executor.stop()
-            timer.stop()
-            del timer
-            effect_executor.clear()
+            self.stop()
             self.timer_out(job_time)
+
+    def stop(self):
+        if self.timer is not None:
+            self.timer.stop()
+            self.timer = None
+        self.executor.pause()
+        if not self.pause_effects:
+            self.stop_effects()
+
+    def stop_effects(self):
+        self.executor.stop()
+        self.executor.clear()

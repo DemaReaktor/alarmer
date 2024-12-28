@@ -13,6 +13,10 @@ class EffectsExecuter:
         for effect in self.effects:
             effect.stop()
 
+    def pause(self):
+        for effect in self.effects:
+            effect.pause()
+
     def on_time(self, time: int):
         for effect in self.effects:
             effect.on_time(time)

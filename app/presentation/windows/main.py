@@ -5,9 +5,7 @@ from app.presentation.windows.timer import TimerDialog
 from app.presentation.windows.break_window import BreakDialog
 from app.presentation.windows.effects import EffectsDialog
 from app.application.classes.settings import TimersSettings, BreakSettings, EffectsSettings
-from app.application.effects.application_timer import ApplicationTimerEffect
-from app.application.effects.black_monitor import BlackMonitorEffect
-from app.application.effects.mouse_stop import StopMouseEffect
+from app.application.effects import ApplicationTimerEffect, BlackMonitorEffect, StopMouseEffect, PauseEffect
 from app.application.settings_storage import SettingsStorage
 from app.application.timer_manager import TimerManager
 
@@ -23,14 +21,24 @@ class MainWindow(QtWidgets.QMainWindow):
         self.timer_settings = SettingsStorage.try_load('timer.json', TimersSettings)
         self.break_settings = SettingsStorage.try_load('break.json', BreakSettings)
         self.effects_settings = SettingsStorage.try_load('effects.json', EffectsSettings)
-        self.start_button.clicked.connect(lambda: self.start())
-        self.timer_manager = TimerManager(self, self.timer_settings, self.break_settings, self.effects_settings)
+        self.start_button.clicked.connect(lambda: self.on_main_button_click())
+        self.timer_manager = TimerManager(self, self.timer_settings)
         self.timer_manager.timer_out = lambda job: self.time_out(job)
         self.label = None
         self.stop_break = None
 
+    def on_main_button_click(self):
+        self.start_button: QtWidgets.QPushButton
+        if self.start_button.text() == 'запуск':
+            self.start_button.setText('стоп')
+            self.start()
+            return
+
+        self.stop_timer()
+        self.start_button.setText('запуск')
+
     def start(self, job_time: bool = True):
-        self.timer_manager.update_settings(self.timer_settings, self.break_settings, self.effects_settings)
+        self.timer_manager.timer_settings = self.timer_settings
         self.timer_manager.executor.effects.clear()
         if job_time and self.timer_settings.show_timer:
             self.timer_manager.executor.effects.append(ApplicationTimerEffect())
@@ -41,10 +49,13 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.timer_manager.executor.effects.append(ApplicationTimerEffect())
             if self.effects_settings.mouse_stop:
                 self.timer_manager.executor.effects.append(StopMouseEffect())
+            if self.effects_settings.pause:
+                self.timer_manager.executor.effects.append(PauseEffect())
         self.timer_manager.start_timer(job_time)
 
     def time_out(self, job_time: bool):
         if job_time:
+            self.timer_manager.executor.clear()
             self.start(False)
             return
 
@@ -65,11 +76,24 @@ class MainWindow(QtWidgets.QMainWindow):
         self.stop_break.show()
 
     def stop_waiting(self):
-        self.label.setMouseTracking(False)
-        self.stop_break.close()
-        self.label = None
-        self.stop_break = None
+        self.timer_manager.stop_effects()
+        self.clear_break_message()
         self.start()
+
+    def stop_timer(self):
+        self.timer_manager.stop()
+        if self.timer_manager.pause_effects:
+            self.timer_manager.stop_effects()
+        self.clear_break_message()
+
+    def clear_break_message(self):
+        if self.label is not None:
+            self.label.setMouseTracking(False)
+            self.label.close()
+            self.label = None
+        if self.stop_break is not None:
+            self.stop_break.close()
+            self.stop_break = None
 
     def open_effects(self):
         dialog = EffectsDialog(self.effects_settings)
@@ -97,6 +121,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def on_close_break(self, dialog):
         if dialog.settings is not None:
             self.break_settings = dialog.settings
+            self.timer_manager.pause_effects = self.break_settings.wait_activity
             SettingsStorage.save(self.break_settings, 'break.json')
 
     def on_close_effects(self, dialog):

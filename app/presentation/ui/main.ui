@@ -6,22 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>345</width>
+    <height>243</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>контролер перерви</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="start_button">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>130</y>
-      <width>131</width>
-      <height>24</height>
+      <y>140</y>
+      <width>311</width>
+      <height>41</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>запуск</string>
@@ -32,9 +37,14 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>151</width>
-      <height>24</height>
+      <width>311</width>
+      <height>41</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>налаштування таймера</string>
@@ -44,10 +54,15 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>40</y>
-      <width>151</width>
-      <height>24</height>
+      <y>50</y>
+      <width>311</width>
+      <height>41</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>налаштування перерви</string>
@@ -57,10 +72,15 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>70</y>
-      <width>151</width>
-      <height>24</height>
+      <y>90</y>
+      <width>311</width>
+      <height>41</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>налаштування ефектів</string>
@@ -72,7 +92,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>345</width>
      <height>33</height>
     </rect>
    </property>

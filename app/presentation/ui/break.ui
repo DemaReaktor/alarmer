@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Налаштування перерви</string>
   </property>
   <widget class="QPushButton" name="cancel_button">
    <property name="geometry">

@@ -18,5 +18,8 @@ class StopMouseEffect(Effect):
         self.lock_y = self.controller.position[1]
         self.listener.start()
 
-    def stop(self):
+    def pause(self):
         self.listener.stop()
+
+    def stop(self):
+        pass

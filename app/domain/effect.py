@@ -15,6 +15,9 @@ class Effect[Settings: EffectSettings](ABC):
     def __call__(self, *args, **kwargs):
         pass
 
+    def pause(self):
+        pass
+
     @abstractmethod
     def stop(self):
         pass
