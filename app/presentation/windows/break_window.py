@@ -11,7 +11,8 @@ class BreakDialog(QtWidgets.QDialog):
         self.cancel_button.clicked.connect(self.close)
         self.settings = settings
         self.stop_box.setChecked(self.settings.wait_activity)
-        
+        self.timer_box.setChecked(self.settings.show_timer)
+
     def accept_clicked(self):
-        self.settings = BreakSettings(self.stop_box.isChecked())
+        self.settings = BreakSettings(self.stop_box.isChecked(), self.timer_box.isChecked())
         self.close()

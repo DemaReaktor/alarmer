@@ -11,10 +11,10 @@ class TimersSettings:
 @dataclass(init=True)
 class BreakSettings:
     wait_activity: bool = True
+    show_timer: bool = False
 
 
 @dataclass(init=True)
 class EffectsSettings:
     black_monitor: bool = True
     mouse_stop: bool = True
-    timer: bool = False

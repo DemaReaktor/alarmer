@@ -9,8 +9,8 @@ from PyQt6.QtGui import QPalette, QColor
 class BlackMonitorEffect(Effect):
     def __call__(self, *args, **kwargs):
         self.window = QtWidgets.QMainWindow()
+        self.window.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
         self.window.setStyleSheet("background-color: black;")
-        self.window.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.window.showMaximized()
         self.window.show()
 

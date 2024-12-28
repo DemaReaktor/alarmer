@@ -28,37 +28,20 @@ class TimerManager:
         self.break_settings = break_settings
         self.effects_settings = effects_settings
 
-    # def start(self):
-    #     self.executor.effects.append(BlackMonitorEffect())
-    #     # executor.effects.append(StopMouseEffect())
-    #     self.executor.effects.append(ApplicationTimerEffect())
-    #     self.executor(parent=self.window, time=self.timer_settings.job_time * 60_000)
-    #     timer = QTimer(self)
-    #     start_time = datetime.now()
-    #     timer.timeout.connect(lambda: self.on_time(timer, self.executor, start_time))
-    #     timer.start(1_000)
-
     def start_timer(self, job_time: bool = True):
-        if not job_time:
-            self.executor(parent=self.window, time=self.timer_settings.break_time * 60_000)
-        timer = QTimer(self)
+        full_time = (self.timer_settings.job_time if job_time else self.timer_settings.break_time) * 60_000
+        self.executor(parent=self.window, time=full_time)
+        timer = QTimer(self.window)
         start_time = datetime.now()
-        timer.timeout.connect(lambda: self.on_time(timer, start_time,
-            self.executor if not job_time else None))
+        timer.timeout.connect(lambda: self.on_time(job_time, timer, start_time, self.executor))
         timer.start(1_000)
 
-    def on_job_time(self, timer: QTimer, start_time: datetime):
-        now_time = datetime.now()
-        difference = int((now_time - start_time).total_seconds() * 1_000)
-        if difference >= self.timer_settings.job_time * 60_000:
-            timer.stop()
-            self.timer_out(True)
-
-    def on_break_time(self, timer: QTimer, start_time: datetime, effect_executor: EffectsExecuter):
+    def on_time(self, job_time: bool, timer: QTimer, start_time: datetime, effect_executor: EffectsExecuter):
         now_time = datetime.now()
         difference = int((now_time - start_time).total_seconds() * 1_000)
         effect_executor.on_time(difference)
-        if difference >= self.timer_settings.break_time * 60_000:
+        full_time = (self.timer_settings.job_time if job_time else self.timer_settings.break_time) * 60_000
+        if difference >= full_time:
             effect_executor.stop()
             timer.stop()
-            self.timer_out(False)
+            self.timer_out(job_time)

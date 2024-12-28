@@ -1,14 +1,13 @@
-from datetime import datetime
 from PyQt6 import QtWidgets
-from PyQt6.QtCore import QTimer
+from PyQt6.QtCore import Qt
 from app.presentation.ui_storage import UIStorage
 from app.presentation.windows.timer import TimerDialog
 from app.presentation.windows.break_window import BreakDialog
 from app.presentation.windows.effects import EffectsDialog
 from app.application.classes.settings import TimersSettings, BreakSettings, EffectsSettings
-from app.domain.effects_executer import EffectsExecuter
 from app.application.effects.application_timer import ApplicationTimerEffect
 from app.application.effects.black_monitor import BlackMonitorEffect
+from app.application.effects.mouse_stop import StopMouseEffect
 # from app.application.effects.mouse_stop import
 from app.application.settings_storage import SettingsStorage
 from app.application.timer_manager import TimerManager
@@ -26,20 +25,53 @@ class MainWindow(QtWidgets.QMainWindow):
         self.timer_settings = SettingsStorage.try_load('timer.json', TimersSettings)
         self.break_settings = SettingsStorage.try_load('break.json', BreakSettings)
         self.effects_settings = SettingsStorage.try_load('effects.json', EffectsSettings)
-        self.start_button.clicked.connect(self.start)
+        self.start_button.clicked.connect(lambda: self.start())
         self.timer_manager = TimerManager(self, self.timer_settings, self.break_settings, self.effects_settings)
         self.timer_manager.timer_out = lambda job: self.time_out(job)
 
-    def start(self):
+    def start(self, job_time: bool = True):
         self.timer_manager.update_settings(self.timer_settings, self.break_settings, self.effects_settings)
-        self.timer_manager.start_timer(True)
+        self.timer_manager.executor.effects.clear()
+        if job_time and self.timer_settings.show_timer:
+            self.timer_manager.executor.effects.append(ApplicationTimerEffect())
+        if not job_time:
+            if self.effects_settings.black_monitor:
+                self.timer_manager.executor.effects.append(BlackMonitorEffect())
+            if self.timer_settings.show_timer:
+                self.timer_manager.executor.effects.append(ApplicationTimerEffect())
+            if self.effects_settings.mouse_stop:
+                self.timer_manager.executor.effects.append(StopMouseEffect())
+        self.timer_manager.start_timer(job_time)
 
     def time_out(self, job_time: bool):
-        if not job_time:
-            # TODO: if stop job time
-            # TODO: update effects
-            pass
-        self.timer_manager.start_timer(not job_time)
+        if job_time:
+            self.start(False)
+            return
+
+        # TODO: if stop job time
+        # TODO: update effects
+        if not self.break_settings.wait_activity:
+            self.start()
+            return
+
+        self.stop_break = QtWidgets.QWidget()
+        self.stop_break.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
+        self.stop_break.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        label = QtWidgets.QLabel(self.stop_break)
+        label.setStyleSheet("font-size: 30px;")
+        label.setText('Перерва закінчилась, можете продовжити (достатньо порухати мишкою або нажати на кнопку)')
+        label.adjustSize()
+        self.stop_break.adjustSize()
+        # self.stop_break.mouseMoveEvent = label
+        self.stop_break.mouseMoveEvent = lambda x: self.stop_waiting()
+        self.stop_break.setMouseTracking(True)
+        self.mouseMoveEvent = lambda x: self.stop_waiting()
+        self.setMouseTracking(True)
+        self.stop_break.show()
+
+    def stop_waiting(self):
+        self.stop_break.close()
+        self.start()
 
     def open_effects(self):
         dialog = EffectsDialog(self.effects_settings)
