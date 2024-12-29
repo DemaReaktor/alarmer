@@ -59,7 +59,7 @@ pyinstaller.exe --onefile --add-data="app/presentation/ui/*;app/presentation/ui/
 Програма є фоновою, при запуску вона буде відображатись у фонових програмах.
 Нажавши на іконку, відкриється програма.
 
-![](docs/main window.png)
+![]("docs/main window.png")
 
 Остання кнопка запускає контролер, остальні відкривають спеціальні налаштування.
 
@@ -68,7 +68,7 @@ pyinstaller.exe --onefile --add-data="app/presentation/ui/*;app/presentation/ui/
 Перші 2 поля визначають час для роботи і перерви (у хв, з допомогою . або , можна вказати більш точний час). 
 Пункт "таймер під час роботи" визначає, чи буде відображатись таймер під час роботи.
 
-![](docs/timer settings.png)
+![]("docs/timer settings.png")
 
 ### Налаштування перерви
 
@@ -77,7 +77,7 @@ pyinstaller.exe --onefile --add-data="app/presentation/ui/*;app/presentation/ui/
 перерви всі ефекти зникнуть і відразу почнеться відлік часу роботи, якщо буде
 увімкнуто, то відлік розпочнеться лише коли користувач наведе мишку на текст.
 
-![](docs/break settings.png)
+![]("docs/break settings.png")
 
 ### Налаштування ефектів
 
@@ -90,12 +90,12 @@ pyinstaller.exe --onefile --add-data="app/presentation/ui/*;app/presentation/ui/
 Зупинка миші призначення для зупинки миші, аби не було можливості вимкнути перерву.
 Чрний екран робить чорний екран, що не дозволяє бачити нічого за пк. 
 
-![](docs/effects settings.png)
+![]("docs/effects settings.png")
 
 ### Таймер
 
 Таймер відображатиметься в крайньому правому кутку.
 
-![](docs/time.png)
+![]("docs/time.png")
 
 [Зміст](#зміст)
