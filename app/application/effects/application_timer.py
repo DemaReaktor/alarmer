@@ -9,10 +9,16 @@ class ApplicationTimerEffect(Effect):
         self.window = QtWidgets.QWidget()
         self.window.setWindowFlags(QtCore.Qt.WindowType.FramelessWindowHint | QtCore.Qt.WindowType.WindowStaysOnTopHint)
         self.window.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
-        self.label = QtWidgets.QLabel(self.window)
-        self.label.setStyleSheet("font-size: 40px;")
-        self.label.setText('00:00:00')
-        self.label.adjustSize()
+        self.labels = [QtWidgets.QLabel(self.window) for _ in range(5)]
+        for index, label in enumerate(self.labels):
+            label.setStyleSheet("font-size: 40px; font-weight: bold;")
+            if index != 4:
+                x = 5 if index % 2 == 0 else -5
+                y = 5 if index > 1 else -5
+                label.setGraphicsEffect(QtWidgets.QGraphicsDropShadowEffect(
+                    blurRadius=10, xOffset=x, yOffset=y, color=QtGui.QColor('black')))
+                label.setText('00:00:00')
+                label.adjustSize()
         self.time = None
         self.window.adjustSize()
         screen = QtGui.QGuiApplication.screens()[0].size()
@@ -25,13 +31,12 @@ class ApplicationTimerEffect(Effect):
         self.window.show()
 
     def on_time(self, time: int):
-        self.label.setText(f'{int((self.time - time) / 60_000)}: {int((self.time - time) / 1000) % 60}')
+        for label in self.labels:
+            label.setText(f' {int((self.time - time) / 60_000)}: {int((self.time - time) / 1000) % 60} ')
 
     def pause(self):
-        self.label.close()
         self.window.close()
         self.window = None
-        self.label = None
         self.time = None
 
     def stop(self):

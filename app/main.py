@@ -1,10 +1,13 @@
 import sys
 
 from PyQt6 import QtWidgets
-from app.presentation.windows.main import MainWindow
+from app.presentation.windows.background_mode_window import BackgroundModeWindow
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
+    app.setQuitOnLastWindowClosed(False)
+    background_window = BackgroundModeWindow()
+    background_window.parent_window.stop_timer()
+    background_window.show()
     sys.exit(app.exec())
