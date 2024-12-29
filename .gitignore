@@ -1,3 +1,8 @@
 */*
 !app/*
+!docs/*
+!dist/*
+!main.spec
+!requirements.txt
+!Презентація контролера перерв.pttx
 *.pyc
