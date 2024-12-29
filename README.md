@@ -25,7 +25,7 @@
 
 Готова програма знаходиться за посиланням, скачавши можна відразу її використовувати.
 
-[Break Controller](https://github.com/DemaReaktor/alarmer/releases/download/v1.1.0/main.exe)
+[Break Controller](https://github.com/DemaReaktor/alarmer/releases/download/v1.1.1/main.exe)
 
 [Зміст](#зміст)
 ### Для розробників
