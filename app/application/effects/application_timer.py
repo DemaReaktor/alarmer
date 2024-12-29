@@ -32,6 +32,11 @@ class ApplicationTimerEffect(Effect):
 
     def on_time(self, time: int):
         for label in self.labels:
+            if self.time - time > 3600_000:
+                label.setText(f' {int((self.time - time) / 3600_000)}:'  
+                    f'{int(((self.time - time) % 3600_000) / 60_000)}:'
+                    f'{int((self.time - time) / 1000) % 60} ')
+                continue
             label.setText(f' {int((self.time - time) / 60_000)}: {int((self.time - time) / 1000) % 60} ')
 
     def pause(self):

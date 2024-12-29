@@ -2,7 +2,7 @@ from app.domain.effects_executer import EffectsExecuter
 from PyQt6.QtCore import QTimer
 from datetime import datetime
 from PyQt6.QtWidgets import QMainWindow
-from app.application.classes.settings import TimersSettings, BreakSettings, EffectsSettings
+from app.application.settings import TimersSettings
 from typing import Callable
 
 

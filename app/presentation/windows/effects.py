@@ -1,6 +1,6 @@
 from PyQt6 import QtWidgets, QtGui
 from app.presentation.ui_storage import UIStorage
-from app.application.classes.settings import EffectsSettings
+from app.application.settings import EffectsSettings
 import os
 
 

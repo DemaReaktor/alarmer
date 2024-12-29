@@ -4,7 +4,7 @@ from app.presentation.ui_storage import UIStorage
 from app.presentation.windows.timer import TimerDialog
 from app.presentation.windows.break_window import BreakDialog
 from app.presentation.windows.effects import EffectsDialog
-from app.application.classes.settings import TimersSettings, BreakSettings, EffectsSettings
+from app.application.settings import TimersSettings, BreakSettings, EffectsSettings
 from app.application.effects import ApplicationTimerEffect, BlackMonitorEffect, StopMouseEffect, PauseEffect
 from app.application.settings_storage import SettingsStorage
 from app.application.timer_manager import TimerManager
